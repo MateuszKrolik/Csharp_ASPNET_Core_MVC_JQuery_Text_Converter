@@ -1,0 +1,1 @@
+# C-_ASPNET_Core_MVC_JQuery_Text_Converte
