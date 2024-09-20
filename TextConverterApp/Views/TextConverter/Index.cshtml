@@ -1,0 +1,56 @@
+@{
+    ViewData["Title"] = "Text Converter";
+}
+
+<h2 class="mt-5 text-center">Text Converter</h2>
+
+<div class="container mt-4">
+    <div class="form-group">
+        <label for="inputText">Enter text:</label>
+        <input type="text" id="inputText" class="form-control" />
+        <div id="validationMessage" class="text-danger mt-2"></div> 
+    </div>
+    <button id="convertButton" class="btn btn-primary mt-2">Convert</button>
+</div>
+
+<div class="container mt-4">
+    <h3>Converted Text:</h3>
+    <p id="convertedText" class="border p-2"></p>
+</div>
+
+<div class="container mt-4">
+    <div id="errorMessage" class="text-danger"></div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#convertButton').click(function () {
+                var inputText = $('#inputText').val();
+
+                // Clear previous error messages
+                $('#errorMessage').text('');
+                $('#validationMessage').text('');
+                $('#inputText').removeClass('is-invalid');
+
+                // Check if the input field is empty
+                if (!inputText) {
+                    $('#inputText').addClass('is-invalid');
+                    $('#validationMessage').text('Please enter some text.');
+                    return;
+                }
+                
+                $.post('/TextConverter/Convert', { inputText: inputText }, function (data) {
+                    if (data.error) {
+                        $('#errorMessage').text(data.error.message);
+                        $('#convertedText').text('');
+                    } else {
+                        $('#convertedText').text(data.translatedText);
+                        $('#errorMessage').text('');
+                    }
+                });
+            });
+        });
+    </script>
+}

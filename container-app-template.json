@@ -1,0 +1,49 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "ConnectionStrings__DefaultConnection": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.App/containerApps",
+      "apiVersion": "2024-03-01",
+      "name": "mkrolik-text-converter",
+      "location": "Germany West Central",
+      "properties": {
+        "managedEnvironmentId": "/subscriptions/d019786f-a8b2-4a34-b7dd-9a55e2832402/resourceGroups/DefaultResourceGroup-DEWC/providers/Microsoft.App/managedEnvironments/managedEnvironment-DefaultResource-bb1a",
+        "configuration": {
+          "ingress": {
+            "external": true,
+            "targetPort": 8080
+          }
+        },
+        "template": {
+          "containers": [
+            {
+              "name": "mkrolik-text-converter",
+              "image": "docker.io/mateuszkrolik/textconverterapp:latest",
+              "resources": {
+                "cpu": 0.5,
+                "memory": "1Gi",
+                "ephemeralStorage": "2Gi"
+              },
+              "env": [
+                {
+                  "name": "ConnectionStrings__DefaultConnection",
+                  "value": "[parameters('ConnectionStrings__DefaultConnection')]"
+                }
+              ]
+            }
+          ],
+          "scale": {
+            "minReplicas": 0,
+            "maxReplicas": 10
+          }
+        }
+      }
+    }
+  ]
+}

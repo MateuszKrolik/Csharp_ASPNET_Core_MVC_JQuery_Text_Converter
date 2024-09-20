@@ -1,0 +1,27 @@
+@model List<TextConverterApp.Models.ConversionModel>
+
+@{
+    ViewBag.Title = "My Conversions";
+}
+
+<h2>My Conversions</h2>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Before</th>
+        <th>After</th>
+        <th>Created At</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var conversion in Model)
+    {
+        <tr>
+            <td>@conversion.Before</td>
+            <td>@conversion.After</td>
+            <td>@conversion.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</td>
+        </tr>
+    }
+    </tbody>
+</table>
