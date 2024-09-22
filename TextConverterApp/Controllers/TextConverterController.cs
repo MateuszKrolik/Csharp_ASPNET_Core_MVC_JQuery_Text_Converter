@@ -40,6 +40,12 @@ public class TextConverterController : BaseController
 
         return View(conversions);
     }
+
+    [Route("TextConverter/NotFound")]
+    public IActionResult PageNotFound()
+    {
+        return View();
+    }
     
     [HttpPost]
     public async Task<IActionResult> Convert(string inputText)
@@ -79,17 +85,6 @@ public class TextConverterController : BaseController
                 {
                     code = (int)errorJson["error"]!["code"]!,
                     message = (string)errorJson["error"]!["message"]!
-                }
-            });
-        }
-        catch (Exception ex)
-        {
-            return Json(new
-            {
-                error = new
-                {
-                    code = 500,
-                    message = $"An unexpected error occurred: {ex.Message}. Please try again later."
                 }
             });
         }

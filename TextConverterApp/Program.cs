@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TextConverterApp.Data;
 using TextConverterApp.RequestHelpers;
 using TextConverterApp.Services.TextConverterService;
+using TextConverterApp.ExceptionHandlers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,8 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ConversionsDbContext>(option =>
     {
@@ -33,8 +36,12 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseExceptionHandler();
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseStatusCodePagesWithReExecute("/TextConverter/NotFound"); 
 
 app.UseRouting();
 
